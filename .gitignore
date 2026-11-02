@@ -1,0 +1,11 @@
+.vs/
+**/.vs/
+**/bin/
+**/obj/
+*.user
+*.suo
+**/venv/
+**/__pycache__/
+*.pyc
+.env
+*.log
