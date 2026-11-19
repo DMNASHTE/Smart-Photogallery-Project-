@@ -1,0 +1,103 @@
+CREATE DATABASE IF NOT EXISTS smart_photo_gallery
+ CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE smart_photo_gallery;
+
+CREATE TABLE IF NOT EXISTS Events (
+ EventId INT AUTO_INCREMENT PRIMARY KEY,
+ YearName VARCHAR(10) NOT NULL,
+ EventName VARCHAR(255) NOT NULL,
+ RelativePath VARCHAR(1000) NOT NULL,
+ LastScannedAt DATETIME NULL,
+ UNIQUE KEY uq_event_path (RelativePath(191)),
+ KEY ix_event_name (EventName),
+ KEY ix_event_year (YearName)
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS Photos (
+ PhotoId BIGINT AUTO_INCREMENT PRIMARY KEY,
+ EventId INT NOT NULL,
+ FileName VARCHAR(255) NOT NULL,
+ RelativePath VARCHAR(1200) NOT NULL,
+ ImageUrl VARCHAR(1500) NULL,
+ FileSize BIGINT NULL,
+ ModifiedAt DATETIME NULL,
+ IsFaceIndexed TINYINT(1) NOT NULL DEFAULT 0,
+ UNIQUE KEY uq_photo_path (RelativePath(191)),
+ KEY ix_photo_event (EventId),
+ CONSTRAINT fk_photos_event FOREIGN KEY (EventId)
+ REFERENCES Events(EventId) ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS Keywords (
+ KeywordId INT AUTO_INCREMENT PRIMARY KEY,
+ KeywordText VARCHAR(100) NOT NULL UNIQUE
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS EventKeywords (
+ EventId INT NOT NULL,
+ KeywordId INT NOT NULL,
+ PRIMARY KEY (EventId, KeywordId),
+ CONSTRAINT fk_eventkeywords_event FOREIGN KEY (EventId)
+ REFERENCES Events(EventId) ON DELETE CASCADE,
+ CONSTRAINT fk_eventkeywords_keyword FOREIGN KEY (KeywordId)
+ REFERENCES Keywords(KeywordId) ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS PhotoKeywords (
+ PhotoId BIGINT NOT NULL,
+ KeywordId INT NOT NULL,
+ PRIMARY KEY (PhotoId, KeywordId),
+ CONSTRAINT fk_photokeywords_photo FOREIGN KEY (PhotoId)
+ REFERENCES Photos(PhotoId) ON DELETE CASCADE,
+ CONSTRAINT fk_photokeywords_keyword FOREIGN KEY (KeywordId)
+ REFERENCES Keywords(KeywordId) ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS Persons (
+ PersonId INT AUTO_INCREMENT PRIMARY KEY,
+ PersonName VARCHAR(200) NOT NULL,
+ ReferencePhotoPath VARCHAR(1200) NOT NULL,
+ CreatedAt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+ KEY ix_person_name (PersonName)
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS PersonFaces (
+ PersonFaceId BIGINT AUTO_INCREMENT PRIMARY KEY,
+ PersonId INT NOT NULL,
+ Embedding LONGBLOB NOT NULL,
+ ModelName VARCHAR(100) NOT NULL,
+ CreatedAt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+ CONSTRAINT fk_personfaces_person FOREIGN KEY (PersonId)
+ REFERENCES Persons(PersonId) ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS PhotoFaces (
+ PhotoFaceId BIGINT AUTO_INCREMENT PRIMARY KEY,
+ PhotoId BIGINT NOT NULL,
+ FaceIndex INT NOT NULL,
+ Embedding LONGBLOB NOT NULL,
+ ModelName VARCHAR(100) NOT NULL,
+ CreatedAt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+ UNIQUE KEY uq_photo_face (PhotoId, FaceIndex),
+ CONSTRAINT fk_photofaces_photo FOREIGN KEY (PhotoId)
+ REFERENCES Photos(PhotoId) ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS FaceMatches (
+ FaceMatchId BIGINT AUTO_INCREMENT PRIMARY KEY,
+ PersonId INT NOT NULL,
+ PhotoId BIGINT NOT NULL,
+ PhotoFaceId BIGINT NOT NULL,
+ Similarity DOUBLE NOT NULL,
+ Reviewed TINYINT(1) NOT NULL DEFAULT 0,
+ Approved TINYINT(1) NULL,
+ CreatedAt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+ UNIQUE KEY uq_person_photo_face (PersonId, PhotoFaceId),
+ KEY ix_match_person (PersonId),
+ CONSTRAINT fk_matches_person FOREIGN KEY (PersonId)
+ REFERENCES Persons(PersonId) ON DELETE CASCADE,
+ CONSTRAINT fk_matches_photo FOREIGN KEY (PhotoId)
+ REFERENCES Photos(PhotoId) ON DELETE CASCADE,
+ CONSTRAINT fk_matches_face FOREIGN KEY (PhotoFaceId)
+ REFERENCES PhotoFaces(PhotoFaceId) ON DELETE CASCADE
+) ENGINE=InnoDB;

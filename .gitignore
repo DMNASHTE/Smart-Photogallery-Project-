@@ -1,11 +1,18 @@
-.vs/
-**/.vs/
-**/bin/
-**/obj/
-*.user
-*.suo
-**/venv/
-**/__pycache__/
+# Python environment
+venv/
+__pycache__/
 *.pyc
+
+# Private configuration
+Web.config
 .env
-*.log
+
+# Visual Studio temporary files
+.vs/
+bin/
+obj/
+
+# Logs and temporary files
+*.logAIService/models/*.onnx
+
+/AIService/models/*.onnx

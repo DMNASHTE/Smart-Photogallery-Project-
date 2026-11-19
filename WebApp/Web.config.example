@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<configuration>
+  <appSettings>
+    <add key="PhotoRoot" value="D:\PhotoArchive\Photos" />
+    <add key="ImageUrlPrefix" value="/GalleryPhotos" />
+    <add key="FaceApiUrl" value="http://127.0.0.1:5005" />
+  </appSettings>
+  <connectionStrings>
+    <add name="GalleryDb" connectionString="Server=127.0.0.1;Port=3306;Database=smart_photo_gallery;Uid=gallery_user;Pwd=CHANGE_ME;CharSet=utf8mb4;" providerName="MySql.Data.MySqlClient" />
+  </connectionStrings>
+  <system.web>
+    <compilation debug="true" targetFramework="4.5" />
+    <httpRuntime targetFramework="4.5" maxRequestLength="20480" executionTimeout="600" />
+    <pages controlRenderingCompatibilityVersion="4.0" />
+  </system.web>
+</configuration>
