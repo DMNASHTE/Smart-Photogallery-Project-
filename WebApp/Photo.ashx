@@ -1,2 +1,1 @@
-﻿
-<%@ WebHandler Language="C#" Class="SmartPhotoGallery.PhotoHandler" %>
+﻿<%@ WebHandler Language="C#" Class="SmartPhotoGallery.PhotoHandler" %>

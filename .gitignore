@@ -1,11 +1,14 @@
-# Python environment
+﻿# Python environments
 venv/
+.venv/
 __pycache__/
 *.pyc
 
-# Private configuration
-Web.config
+# Private configuration and credentials
 .env
+.env.*
+!.env.example
+Web.config
 
 # Visual Studio temporary files
 .vs/
@@ -13,6 +16,11 @@ bin/
 obj/
 
 # Logs and temporary files
-*.logAIService/models/*.onnx
+*.log
+*.tmp
 
-/AIService/models/*.onnx
+# ONNX models
+AIService/models/*.onnx
+
+# Private person reference photographs
+WebApp/App_Data/PersonReferencePhotos/

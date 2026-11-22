@@ -8,9 +8,9 @@ SFACE_MODEL = os.path.join(MODEL_DIR, "face_recognition_sface_2021dec.onnx")
 MYSQL = {
     "host": "127.0.0.1",
     "port": 3306,
-    "user": "gallery_user",
-    "password": "CHANGE_ME",
+    "user": "user",
+    "password": "change_me",
     "database": "smart_photo_gallery"
 }
 MODEL_NAME = "OpenCV-YuNet-SFace"
-
+PHOTO_ROOT = r"D:\PhotoArchive\Photos\PhotoArchive"

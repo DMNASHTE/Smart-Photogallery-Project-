@@ -2,10 +2,11 @@
 import cv2
 from config import YUNET_MODEL, SFACE_MODEL
 
-photos = [
-    r"D:\PhotoArchive\Photos\PhotoArchive\2025\CulturalEvent\abd.jpg",
-    r"D:\PhotoArchive\Photos\PhotoArchive\2026\AnnualFunction\images\bgh.jpg"
+photos  = [
+    r"D:\PhotoArchive\Photos\PhotoArchive\2025\CulturalEvent\20200119_063722.jpg",
+    r"D:\PhotoArchive\Photos\PhotoArchive\2026\AnnualFunction\images\20221028_173953.jpg"
 ]
+
 
 detector = cv2.FaceDetectorYN_create(YUNET_MODEL, "", (320, 320))
 recognizer = cv2.FaceRecognizerSF_create(SFACE_MODEL, "")

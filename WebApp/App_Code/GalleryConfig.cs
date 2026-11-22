@@ -1,6 +1,7 @@
 using System;
 using System.Configuration;
 using System.IO;
+using System.Web;
 
 namespace SmartPhotoGallery
 {
@@ -26,10 +27,16 @@ namespace SmartPhotoGallery
             get { return (ConfigurationManager.AppSettings["FaceApiUrl"] ?? "http://127.0.0.1:5005").TrimEnd('/'); }
         }
 
+
         public static string ToImageUrl(string relativePath)
         {
-            string normalized = (relativePath ?? "").Replace('\\', '/').TrimStart('/');
-            return ImageUrlPrefix + "/" + normalized;
+            string normalized = (relativePath ?? "")
+                .Replace('\\', '/')
+                .TrimStart('/');
+
+            return VirtualPathUtility.ToAbsolute("~/Photo.ashx")
+                + "?path=" + HttpUtility.UrlEncode(normalized);
         }
+
     }
 }
